@@ -54,7 +54,69 @@ def draw():
         game_over_screen()
 
 def update():
-    pass
+    global score,speed,lives
+
+    #move ship left/right
+    if keyboard.left:
+        ship.x -= speed
+        if ship.x <= 0:
+            ship.x = 0
+    elif keyboard.right:
+        ship.x += speed
+        if ship.x>= WIDTH:
+            ship.x = WIDTH
+
+    #bullet movement
+    for bullet in bullets:
+        if bullet.y<=0:
+            bullets.remove(bullet)
+        else:
+            bullet.y -= 10
+
+    #enemies movement
+    for enemy in enemies:
+        enemy.y += 5
+        if enemy.y > HEIGHT:
+            enemy.x = random.randint(0,1000)
+            enemy.y = random.randint(-30,0)
+
+        #collision with bullet
+        for bullet in bullets:
+            if enemy.colliderect(bullet):
+                score +=100
+                sounds.eep.play()
+                if bullet in bullets:
+                    bullets.remove(bullet)
+                if enemy in enemies:
+                    enemies.remove(enemy)
+                break
+
+        #collision with ship
+        if enemy.colliderect(ship):
+            lives -=1
+            if enemy in enemies:
+                enemies.remove(enemy)
+            if lives == 0:
+                game_over()
+
+    #recreating enemies
+    if len(enemies) < 8:
+        enemy = Actor("enemy")
+        enemy.x = random.randint(0,1000)
+        enemy.y = random.randint(-30,0)
+        enemies.append(enemy)
+
+def game_over():
+    global is_game_over
+    is_game_over = True
+
+def game_over_screen():
+    screen.clear()
+    screen.fill("#2C5554")
+    screen.draw.text("GAME OVER!!",(CENTER_X,CENTER_Y),fontsize = 50,color = "white")
+    screen.draw.text(f"Your score is {score}", (CENTER_X,CENTER_Y+50),fontsize = 40, color ="white")
+    screen.draw.text("Press the SPACE key to play again!",(CENTER_X,CENTER_Y+80),fontsize = 40, color ="white") 
+           
 
 
 
