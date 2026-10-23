@@ -28,8 +28,8 @@ for i in range(8):
 
 #score and lives display
 def score_and_lives_display():
-    screen.draw.text(f"Score:{score}",(50,30),fontsize= 50)
-    screen.draw.text(f"Lives:{lives}",(50,60),fontsize= 50)
+    screen.draw.text(f"Score:{score}",(50,30),fontsize= 40,color="#8CC5DE")
+    screen.draw.text(f"Lives:{lives}",(50,80),fontsize= 40,color="#8CC5DE")
 
 #create bullets
 def on_key_down(key):
@@ -113,22 +113,24 @@ def game_over():
 def game_over_screen():
     screen.clear()
     screen.fill("#2C5554")
-    screen.draw.text("GAME OVER!!",(CENTER_X,CENTER_Y),fontsize = 50,color = "white")
-    screen.draw.text(f"Your score is {score}", (CENTER_X,CENTER_Y+50),fontsize = 40, color ="white")
-    screen.draw.text("Press the SPACE key to play again!",(CENTER_X,CENTER_Y+80),fontsize = 40, color ="white") 
-           
+    screen.draw.text("GAME OVER!!",(CENTER_X-150,CENTER_Y-50),fontsize = 50,color="#8CC5DE")
+    screen.draw.text(f"Your score is {score}", (CENTER_X-150,CENTER_Y),fontsize = 40, color="#8CC5DE")
+    screen.draw.text("Press the SPACE key to play again!",(CENTER_X-150,CENTER_Y+50),fontsize = 40, color="#8CC5DE") 
+    if keyboard.SPACE:
+        restart_game()
 
-
-
-
-
-
-
-
-
-
-
-
+def restart_game():
+    global enemies,score,lives, speed,bullets  
+    score = 0
+    lives = 3
+    speed = 5
+    enemies = []
+    bullets = []
+    for i in range(8):
+        enemy = Actor("enemy")
+        enemy.x = random.randint(0,1000)
+        enemy.y = random.randint(-30,0)
+        enemies.append(enemy)
 
 
 pgzrun.go()
